@@ -98,7 +98,6 @@ def main():
         with col2:
             try:
                 markdown_content = ocr(temp_file_path, api_key, model="Llama-3.2-11B-Vision")
-                st.markdown("### Extracted Markdown:")
                 st.markdown(markdown_content)
             except Exception as e:
                 st.error(f"An error occurred: {e}")
