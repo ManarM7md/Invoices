@@ -78,7 +78,7 @@ def ocr(
     vision_llm = f"meta-llama/{model}-Instruct-Turbo" if model != "free" else "meta-llama/Llama-Vision-Free"
 
     # Initialize Together without unexpected arguments
-   together = Together(api_key=api_key)
+   together = Together()
     
     final_markdown = get_markdown(together, vision_llm, file_path)
 
