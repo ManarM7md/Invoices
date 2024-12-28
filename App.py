@@ -16,7 +16,7 @@ def get_markdown(together: Together, file_path: str) -> str:
     output = together.process_image(final_image_url)
     return output
 
-def ocr(file_path: str, api_key: Optional[str] = None) -> str:
+def ocr(file_path: str, api_key: str) -> str:
     """
     Perform OCR on an image using Together AI.
     Args:
@@ -25,10 +25,8 @@ def ocr(file_path: str, api_key: Optional[str] = None) -> str:
     Returns:
         Markdown formatted text from the image
     """
-    if api_key is None:
-        api_key = "YOUR_API_KEY_HERE"
-
-    together = Together(api_key=api_key)  # Initialize Together with the API key
+    together = Together()  # Initialize Together without an API key
+    together.set_api_key(api_key)  # Set the API key separately
 
     final_markdown = get_markdown(together, file_path)
 
@@ -50,7 +48,7 @@ def main():
 
         try:
             api_key = "fafd8f87a381ed63e1bc0409b6947082dddc6b0bc190c9c9007f3545531b0983"
-            markdown_content = ocr(temp_file_path, api_key=api_key)
+            markdown_content = ocr(temp_file_path, api_key)
             
             st.markdown("### Extracted Markdown:")
             st.markdown(markdown_content)
