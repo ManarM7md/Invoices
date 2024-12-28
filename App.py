@@ -78,8 +78,8 @@ def ocr(
     vision_llm = f"meta-llama/{model}-Instruct-Turbo" if model != "free" else "meta-llama/Llama-Vision-Free"
 
     # Initialize Together without unexpected arguments
-   together = Together()
-    
+    together = Together()
+
     final_markdown = get_markdown(together, vision_llm, file_path)
 
     return final_markdown
@@ -106,7 +106,7 @@ def main():
         try:
             api_key = "fafd8f87a381ed63e1bc0409b6947082dddc6b0bc190c9c9007f3545531b0983"
             markdown_content = ocr(temp_file_path, api_key=api_key, model="Llama-3.2-11B-Vision")
-            
+
             # Display the Markdown content
             st.markdown("### Extracted Markdown:")
             st.markdown(markdown_content)
