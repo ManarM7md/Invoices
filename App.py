@@ -1,12 +1,11 @@
 import streamlit as st
 import os
-from PIL import Image
-from together import Together
 import base64
 from typing import Optional, Literal
+from together import Together
 
 
-# Functions from the original code
+# Functions
 def encode_image(image_path: str) -> str:
     """Read and encode image to base64."""
     with open(image_path, 'rb') as image_file:
@@ -78,7 +77,10 @@ def ocr(
 
     vision_llm = f"meta-llama/{model}-Instruct-Turbo" if model != "free" else "meta-llama/Llama-Vision-Free"
 
-    together = Together(api_key=api_key)
+    # Initialize Together without unexpected arguments
+    together = Together()
+    together.init(api_key=api_key)
+
     final_markdown = get_markdown(together, vision_llm, file_path)
 
     return final_markdown
@@ -99,11 +101,11 @@ def main():
             f.write(uploaded_file.getbuffer())
 
         # Display the uploaded image
-        st.image(temp_file_path, caption="Uploaded Image", use_column_width=True)
+        st.image(temp_file_path, caption="Uploaded Image", use_container_width=True)
 
         # Extract Markdown
         try:
-            api_key = "fafd8f87a381ed63e1bc0409b6947082dddc6b0bc190c9c9007f3545531b0983"
+            api_key = os.getenv('TOGETHER_API_KEY')  # Use environment variable for API key
             markdown_content = ocr(temp_file_path, api_key=api_key, model="Llama-3.2-11B-Vision")
             
             # Display the Markdown content
