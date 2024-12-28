@@ -103,7 +103,7 @@ def main():
 
         # Extract Markdown
         try:
-            api_key = os.getenv('TOGETHER_API_KEY')
+            api_key = "fafd8f87a381ed63e1bc0409b6947082dddc6b0bc190c9c9007f3545531b0983"
             markdown_content = ocr(temp_file_path, api_key=api_key, model="Llama-3.2-11B-Vision")
             
             # Display the Markdown content
