@@ -25,7 +25,8 @@ def get_markdown(
     system_prompt = """Convert the provided image into Markdown format. Ensure that all content from the page is included, such as headers, footers, subtexts, images (with alt text if possible), tables, and any other elements.
      Requirements:
     - Output Only Markdown: Return solely the Markdown content without any additional explanations or comments.
-    - No Delimiters: Do not use code fences or delimiters like ```markdown.
+    - No Delimiters: Do not use code fences or delimiters like
+markdown.
     - Complete Content: Do not omit any part of the page, including headers, footers, and subtext.
     """
 
@@ -47,7 +48,7 @@ def get_markdown(
 # OCR function
 def ocr(
     file_path: str,
-    api_key: Optional[str] = None,
+    api_key: Optional[str],
     model: Literal["Llama-3.2-90B-Vision", "Llama-3.2-11B-Vision", "free"] = "Llama-3.2-90B-Vision"
 ) -> str:
     """
@@ -55,16 +56,14 @@ def ocr(
 
     Args:
         file_path: Path to the image file or URL
-        api_key: Together AI API key (defaults to TOGETHER_API_KEY environment variable)
+        api_key: Together AI API key
         model: Model to use for vision processing
 
     Returns:
         Markdown formatted text from the image
     """
     if api_key is None:
-        api_key = "fafd8f87a381ed63e1bc0409b6947082dddc6b0bc190c9c9007f3545531b0983"
-        if api_key is None:
-            raise ValueError("API key must be provided either directly or through TOGETHER_API_KEY environment variable")
+        raise ValueError("API key must be provided")
 
     vision_llm = f"meta-llama/{model}-Instruct-Turbo" if model != "free" else "meta-llama/Llama-Vision-Free"
 
@@ -78,6 +77,12 @@ def main():
     st.title("Image to Markdown Converter")
     st.write("Upload an image, and this app will convert its content into Markdown using Together AI.")
 
+    api_key = st.text_input("Enter your Together AI API Key", type="password")
+
+    if not api_key:
+        st.warning("Please enter your API key to proceed.")
+        return
+
     uploaded_file = st.file_uploader("Choose an image file", type=["jpg", "jpeg", "png"])
 
     if uploaded_file is not None:
@@ -88,8 +93,6 @@ def main():
         st.image(temp_file_path, caption="Uploaded Image", use_container_width=True)
 
         try:
-            # Use your actual API key here
-            api_key = "fafd8f87a381ed63e1bc0409b6947082dddc6b0bc190c9c9007f3545531b0983"
             markdown_content = ocr(temp_file_path, api_key, model="Llama-3.2-11B-Vision")
             
             st.markdown("### Extracted Markdown:")
