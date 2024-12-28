@@ -70,9 +70,9 @@ def ocr(
 
     # Initialize Together client
     together = Together(api_key=api_key)
+    final_markdown = get_markdown(together, vision_llm, file_path)
 
-    # Get markdown from the image
-    return get_markdown(together, file_path)
+    return final_markdown
 
 # Streamlit App
 def main():
