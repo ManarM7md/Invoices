@@ -11,21 +11,40 @@ def encode_image(image_path: str) -> str:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
 # Function to get Markdown output from Together's vision model
-def get_markdown(together: Together, file_path: str) -> str:
+def get_markdown(
+    together: Together,
+    vision_llm: str,
+    file_path: str
+) -> str:
     """Process image and convert to markdown using Together AI."""
-    final_image_url = f"data:image/jpeg;base64,{encode_image(file_path)}"
-    
-    # Call Together's API, using chat completions for a vision model, update accordingly
-    try:
-        response = together.chat.completions.create(
-            model="meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo",  # Example model
-            messages=[
-                {"role": "user", "content": final_image_url}
-            ]
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        return f"Error: {str(e)}"
+    system_prompt = """Convert the provided image into Markdown format. Ensure that all content from the page is included, such as headers, footers, subtexts, images (with alt text if possible), tables, and any other elements.
+     Requirements:
+    - Output Only Markdown: Return solely the Markdown content without any additional explanations or comments.
+    - No Delimiters: Do not use code fences or delimiters like ```markdown.
+    - Complete Content: Do not omit any part of the page, including headers, footers, and subtext.
+    """
+
+    final_image_url = file_path if is_remote_file(file_path) else f"data:image/jpeg;base64,{encode_image(file_path)}"
+
+    output = together.chat.completions.create(
+        model=vision_llm,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": system_prompt},
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": final_image_url
+                        }
+                    }
+                ]
+            }
+        ]
+    )
+
+    return output.choices[0].message.content
 
 # OCR function
 def ocr(
