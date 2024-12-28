@@ -38,13 +38,12 @@ def ocr(
         Markdown formatted text from the image
     """
     if api_key is None:
-        api_key = os.getenv('TOGETHER_API_KEY')
+        api_key = "fafd8f87a381ed63e1bc0409b6947082dddc6b0bc190c9c9007f3545531b0983"
         if api_key is None:
             raise ValueError("API key must be provided either directly or through TOGETHER_API_KEY environment variable")
 
     # Initialize Together client and set API key (if necessary)
-    together = Together()
-    together.set_api_key(api_key)  # Adjust this if needed
+    together = Together(api_key=api_key)
 
     # Process image
     return get_markdown(together, file_path)
