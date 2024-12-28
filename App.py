@@ -74,7 +74,7 @@ def ocr(
 
 # Streamlit App
 def main():
-    st.title("Image to Markdown Converter")
+    st.title("OCR: Document to Markdown")
     st.write("Upload an image, and this app will convert its content into Markdown using Together AI.")
 
     api_key = st.text_input("Enter your Together AI API Key", type="password")
@@ -90,16 +90,18 @@ def main():
         with open(temp_file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
 
-        st.image(temp_file_path, caption="Uploaded Image", use_container_width=True)
+        col1, col2 = st.columns(2)
 
-        try:
-            markdown_content = ocr(temp_file_path, api_key, model="Llama-3.2-11B-Vision")
-            
-            st.markdown("### Extracted Markdown:")
-            st.markdown(markdown_content)
+        with col1:
+            st.image(temp_file_path, caption="Uploaded Image", use_container_width=True)
 
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+        with col2:
+            try:
+                markdown_content = ocr(temp_file_path, api_key, model="Llama-3.2-11B-Vision")
+                st.markdown("### Extracted Markdown:")
+                st.markdown(markdown_content)
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
 
         # Clean up the temporary file
         os.remove(temp_file_path)
