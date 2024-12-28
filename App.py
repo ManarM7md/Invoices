@@ -16,19 +16,31 @@ def get_markdown(together: Together, file_path: str) -> str:
     output = together.process_image(final_image_url)
     return output
 
-def ocr(file_path: str, api_key: str) -> str:
+def ocr(
+    file_path: str,
+    api_key: Optional[str] = None,
+    model: Literal["Llama-3.2-90B-Vision", "Llama-3.2-11B-Vision", "free"] = "Llama-3.2-90B-Vision"
+) -> str:
     """
     Perform OCR on an image using Together AI.
+
     Args:
-        file_path: Path to the image file
-        api_key: Together AI API key
+        file_path: Path to the image file or URL
+        api_key: Together AI API key (defaults to TOGETHER_API_KEY environment variable)
+        model: Model to use for vision processing
+
     Returns:
         Markdown formatted text from the image
     """
-    together = Together()  # Initialize Together without an API key
-    together.set_api_key(api_key)  # Set the API key separately
+    if api_key is None:
+        api_key = os.getenv('TOGETHER_API_KEY')
+        if api_key is None:
+            raise ValueError("API key must be provided either directly or through TOGETHER_API_KEY environment variable")
 
-    final_markdown = get_markdown(together, file_path)
+    vision_llm = f"meta-llama/{model}-Instruct-Turbo" if model != "free" else "meta-llama/Llama-Vision-Free"
+
+    together = Together(api_key=api_key)
+    final_markdown = get_markdown(together, vision_llm, file_path)
 
     return final_markdown
 
