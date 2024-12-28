@@ -1,14 +1,19 @@
-import streamlit as st
 import os
 import base64
 from typing import Optional, Literal
 from together import Together
+import streamlit as st
 
 # Function to encode image to base64
 def encode_image(image_path: str) -> str:
     """Read and encode image to base64."""
     with open(image_path, 'rb') as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
+
+# Function to check if the file is a remote URL
+def is_remote_file(file_path: str) -> bool:
+    """Check if the file path is a remote URL."""
+    return file_path.startswith(('http://', 'https://'))
 
 # Function to get Markdown output from Together's vision model
 def get_markdown(
@@ -28,20 +33,13 @@ def get_markdown(
 
     output = together.chat.completions.create(
         model=vision_llm,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": system_prompt},
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": final_image_url
-                        }
-                    }
-                ]
-            }
-        ]
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": system_prompt},
+                {"type": "image_url", "image_url": {"url": final_image_url}}
+            ]
+        }]
     )
 
     return output.choices[0].message.content
@@ -64,11 +62,12 @@ def ocr(
         Markdown formatted text from the image
     """
     if api_key is None:
-        api_key = os.getenv('TOGETHER_API_KEY')
+        api_key = "fafd8f87a381ed63e1bc0409b6947082dddc6b0bc190c9c9007f3545531b0983"
         if api_key is None:
             raise ValueError("API key must be provided either directly or through TOGETHER_API_KEY environment variable")
 
-    # Initialize Together client
+    vision_llm = f"meta-llama/{model}-Instruct-Turbo" if model != "free" else "meta-llama/Llama-Vision-Free"
+
     together = Together(api_key=api_key)
     final_markdown = get_markdown(together, vision_llm, file_path)
 
