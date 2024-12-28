@@ -91,7 +91,7 @@ def main():
         try:
             # Use your actual API key here
             api_key = "fafd8f87a381ed63e1bc0409b6947082dddc6b0bc190c9c9007f3545531b0983"
-            markdown_content = ocr(temp_file_path, api_key)
+            markdown_content = ocr(temp_file_path, api_key, model="Llama-3.2-11B-Vision")
             
             st.markdown("### Extracted Markdown:")
             st.markdown(markdown_content)
