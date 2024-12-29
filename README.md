@@ -1,27 +1,27 @@
 # Invoice OCR Toolkit
 
-Invoice is a comprehensive toolkit for extracting and converting text from invoice images and documents. Leveraging cutting-edge AI vision models and traditional OCR solutions, this repository offers highly accurate and efficient tools for extracting text and converting it into Markdown or plain text formats.
-
+**Invoice** is a comprehensive toolkit for extracting and converting text from invoice images and documents. Leveraging cutting-edge AI vision models and traditional OCR solutions, this repository offers highly accurate and efficient tools for extracting text and converting it into Markdown or plain text formats.
 
 ## Key Features
-🚀 Advanced AI-Powered OCR
-- **Together AI Vision Models:
-- **Extract text and structure (headers, tables, subtexts, etc.) with high precision.
-- **Outputs clean, Markdown-formatted documents.
-- **Supports multiple model configurations, including Llama-3.2-90B-Vision, Llama-3.2-11B-Vision, and a free-tier model.
-   
-📜 Lightweight OCR with Tesseract
-- **Fast, offline, and open-source solution.
-- **Preprocessing for better accuracy (e.g., noise removal, resizing).
-- **Supports multilingual text recognition: English, French, Arabic, Spanish, German, Italian, and more.
-  
-🛠 EasyOCR Integration
-- **An additional, robust OCR solution.
-- **Automatic language detection and reliable text extraction.
-  
-🌟 Streamlit Application
-- **A user-friendly interface for uploading and converting invoice images to Markdown.
 
+### 🚀 Advanced AI-Powered OCR
+- **Together AI Vision Models:**
+  - Extract text and structure (headers, tables, subtexts, etc.) with high precision.
+  - Outputs clean, Markdown-formatted documents.
+  - Supports multiple model configurations, including Llama-3.2-90B-Vision, Llama-3.2-11B-Vision, and a free-tier model.
+
+### 📜 Lightweight OCR with Tesseract
+- Fast, offline, and open-source solution.
+- Preprocessing for better accuracy (e.g., noise removal, resizing).
+- Supports multilingual text recognition: English, French, Arabic, Spanish, German, Italian, and more.
+
+### 🛠 EasyOCR Integration
+- An additional, robust OCR solution.
+- Automatic language detection and reliable text extraction.
+
+### 🌟 Streamlit Application
+- A user-friendly interface for uploading and converting invoice images to Markdown.
+- Access the app here: [Invoice OCR App](https://invoices-bz4djaejhcjykryekf2v74.streamlit.app/).
 
 ## Requirements
 
@@ -82,16 +82,14 @@ This will:
 - Use Google Generative AI to further process and structure the data.
 
 3. **Output**:
-   - The data will be saved as a CSV file with fields such as Description, RATE, HOURES, and Amount.
+   - The data will be saved as a CSV file with fields such as Description, RATE, HOURS, and Amount.
 
 Example of CSV output:
 
 ```csv
-Description, RATE, HOURES, and Amount
-Content Plan	$50/hr	4	$200.00 
-Copy Writing	$50/hr	2	$100.00 
-![image](https://github.com/user-attachments/assets/b01be701-61c9-4b24-a291-d7e117c1cffb)
-
+Description, RATE, HOURS, Amount
+Content Plan, $50/hr, 4, $200.00
+Copy Writing, $50/hr, 2, $100.00
 ```
 
 ## Code Structure
@@ -101,8 +99,7 @@ Copy Writing	$50/hr	2	$100.00
 - Uses `easyocr` for text extraction and `pytesseract` for Arabic OCR.
 - Uses `langchain` and Google's Generative AI for further data structuring.
 
-
-Acknowledgments
-Together AI for their exceptional Vision models.
-Tesseract OCR for their open-source OCR solution.
-EasyOCR for their lightweight and robust library.
+## Acknowledgments
+- Together AI for their exceptional Vision models.
+- Tesseract OCR for their open-source OCR solution.
+- EasyOCR for their lightweight and robust library.
