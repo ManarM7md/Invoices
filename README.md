@@ -82,14 +82,16 @@ This will:
 - Use Google Generative AI to further process and structure the data.
 
 3. **Output**:
-   - The data will be saved as a CSV file with fields such as Item ID, Item Description, Unit Price, Quantity, Tax, and Total Amount.
+   - The data will be saved as a CSV file with fields such as Description, RATE, HOURES, and Amount.
 
 Example of CSV output:
 
 ```csv
-Item ID, Item Description, Unit Price, Quantity, Tax, Total Amount
-1234, Product A, 50.00, 2, 10%, 110.00
-5678, Product B, 75.00, 1, 5%, 78.75
+Description, RATE, HOURES, and Amount
+Content Plan	$50/hr	4	$200.00 
+Copy Writing	$50/hr	2	$100.00 
+![image](https://github.com/user-attachments/assets/b01be701-61c9-4b24-a291-d7e117c1cffb)
+
 ```
 
 ## Code Structure
@@ -100,6 +102,7 @@ Item ID, Item Description, Unit Price, Quantity, Tax, Total Amount
 - Uses `langchain` and Google's Generative AI for further data structuring.
 
 
-## Contributing
-
-Feel free to fork the repository, make improvements, and submit pull requests. Contributions are welcome!
+Acknowledgments
+Together AI for their exceptional Vision models.
+Tesseract OCR for their open-source OCR solution.
+EasyOCR for their lightweight and robust library.
