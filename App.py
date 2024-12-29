@@ -79,10 +79,6 @@ def main():
 
     api_key = st.text_input("Enter your Together AI API Key", type="password")
 
-    if not api_key:
-        st.warning("Please enter your API key to proceed.")
-        return
-
     uploaded_file = st.file_uploader("Choose an image file", type=["jpg", "jpeg", "png"])
 
     if uploaded_file is not None:
