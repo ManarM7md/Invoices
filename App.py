@@ -115,8 +115,7 @@ def main():
 
         with col2:
             try:
-                markdown_content = ocr(temp_file_path, api_key if model_choice != "Tesseract" else None, model=model_choice)
-                st.markdown("### Extracted Markdown:")
+                markdown_content = ocr(temp_file_path, api_key=api_key, model=model_choice)
                 st.markdown(markdown_content)
             except Exception as e:
                 st.error(f"An error occurred: {e}")
