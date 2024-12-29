@@ -1,14 +1,27 @@
-# OCR Invoice Processing with EasyOCR, Tesseract, and Google AI
+# Invoice OCR Toolkit
 
-This project extracts text and structured data from invoices using Optical Character Recognition (OCR) and generative AI. The system processes images or scanned invoices in both Arabic and English, extracting useful fields such as item ID, description, price, quantity, and total amount, and outputs the results in CSV format.
+Invoice is a comprehensive toolkit for extracting and converting text from invoice images and documents. Leveraging cutting-edge AI vision models and traditional OCR solutions, this repository offers highly accurate and efficient tools for extracting text and converting it into Markdown or plain text formats.
 
-## Features
 
-- **OCR Extraction**: Extracts text from images using both EasyOCR (for multi-language support) and Tesseract (for Arabic OCR).
-- **Multi-Language Support**: Processes invoices in Arabic and English.
-- **Table Extraction**: Supports extracting structured data (tables) from invoices.
-- **Generative AI for Data Structuring**: Uses Google's Generative AI to extract structured invoice data like item ID, description, unit price, and total amount.
-- **CSV Export**: Saves extracted and structured data in CSV format.
+## Key Features
+🚀 Advanced AI-Powered OCR
+- **Together AI Vision Models:
+- **Extract text and structure (headers, tables, subtexts, etc.) with high precision.
+- **Outputs clean, Markdown-formatted documents.
+- **Supports multiple model configurations, including Llama-3.2-90B-Vision, Llama-3.2-11B-Vision, and a free-tier model.
+   
+📜 Lightweight OCR with Tesseract
+- **Fast, offline, and open-source solution.
+- **Preprocessing for better accuracy (e.g., noise removal, resizing).
+- **Supports multilingual text recognition: English, French, Arabic, Spanish, German, Italian, and more.
+  
+🛠 EasyOCR Integration
+- **An additional, robust OCR solution.
+- **Automatic language detection and reliable text extraction.
+  
+🌟 Streamlit Application
+- **A user-friendly interface for uploading and converting invoice images to Markdown.
+
 
 ## Requirements
 
