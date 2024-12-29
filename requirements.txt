@@ -4,8 +4,7 @@ pillow
 langdetect 
 easyocr 
 pytesseract
+tesseract-ocr
+libtesseract-dev
 langchain_google_genai
-sudo apt update
-sudo apt install tesseract-ocr
-sudo apt install libtesseract-dev
 
