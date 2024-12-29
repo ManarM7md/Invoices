@@ -3,31 +3,19 @@ import base64
 from typing import Optional, Literal
 from together import Together
 import streamlit as st
-import cv2
-import numpy as np
-from pytesseract import pytesseract, TesseractNotFoundError
-from PIL import Image
 
-# Configure Tesseract path
-pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
-
-def check_tesseract_installed() -> bool:
-    """Check if Tesseract is installed and accessible."""
-    try:
-        _ = pytesseract.get_tesseract_version()
-        return True
-    except TesseractNotFoundError:
-        return False
-
+# Function to encode image to base64
 def encode_image(image_path: str) -> str:
     """Read and encode image to base64."""
     with open(image_path, 'rb') as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
+# Function to check if the file is a remote URL
 def is_remote_file(file_path: str) -> bool:
     """Check if the file path is a remote URL."""
     return file_path.startswith(('http://', 'https://'))
 
+# Function to get Markdown output from Together's vision model
 def get_markdown(
     together: Together,
     vision_llm: str,
@@ -37,7 +25,8 @@ def get_markdown(
     system_prompt = """Convert the provided image into Markdown format. Ensure that all content from the page is included, such as headers, footers, subtexts, images (with alt text if possible), tables, and any other elements.
      Requirements:
     - Output Only Markdown: Return solely the Markdown content without any additional explanations or comments.
-    - No Delimiters: Do not use code fences or delimiters like markdown.
+    - No Delimiters: Do not use code fences or delimiters like
+markdown.
     - Complete Content: Do not omit any part of the page, including headers, footers, and subtext.
     """
 
@@ -56,41 +45,23 @@ def get_markdown(
 
     return output.choices[0].message.content
 
-def tesseract_ocr(file_path: str) -> str:
-    """Perform OCR using Tesseract."""
-    if not check_tesseract_installed():
-        raise RuntimeError("Tesseract is not installed or not found in the PATH.")
-
-    image = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
-    if image is None:
-        raise ValueError("Invalid image file.")
-
-    # Preprocess image
-    _, img_bin = cv2.threshold(image, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-
-    # Perform OCR
-    text = pytesseract.image_to_string(img_bin, lang='eng')
-    return text
-
+# OCR function
 def ocr(
     file_path: str,
     api_key: Optional[str],
-    model: Literal["Llama-3.2-90B-Vision", "Llama-3.2-11B-Vision", "Tesseract"] = "Llama-3.2-90B-Vision"
+    model: Literal["Llama-3.2-90B-Vision", "Llama-3.2-11B-Vision", "free"] = "Llama-3.2-90B-Vision"
 ) -> str:
     """
-    Perform OCR on an image using Together AI or Tesseract.
+    Perform OCR on an image using Together AI.
 
     Args:
         file_path: Path to the image file or URL
-        api_key: Together AI API key (required for Together AI models)
+        api_key: Together AI API key
         model: Model to use for vision processing
 
     Returns:
         Markdown formatted text from the image
     """
-    if model == "Tesseract":
-        return tesseract_ocr(file_path)
-
     if api_key is None:
         raise ValueError("API key must be provided")
 
@@ -101,18 +72,18 @@ def ocr(
 
     return final_markdown
 
+# Streamlit App
 def main():
-    st.title("Image to Markdown Converter")
-    st.write("Upload an image, and this app will convert its content into Markdown.")
+    st.title("OCR: Document to Markdown")
+    st.write("Upload an image, and this app will convert its content into Markdown using Together AI.")
 
     api_key = st.text_input("Enter your Together AI API Key", type="password")
 
     if not api_key:
-        st.warning("Please enter your API key to use Together AI models.")
+        st.warning("Please enter your API key to proceed.")
+        return
 
     uploaded_file = st.file_uploader("Choose an image file", type=["jpg", "jpeg", "png"])
-
-    model_choice = st.selectbox("Choose OCR Model", ["Llama-3.2-11B-Vision", "Tesseract"])
 
     if uploaded_file is not None:
         temp_file_path = "temp_uploaded_image.png"
@@ -126,16 +97,13 @@ def main():
 
         with col2:
             try:
-                markdown_content = ocr(temp_file_path, api_key=api_key , model=model_choice) 
-                st.markdown("### Extracted Markdown:")
+                markdown_content = ocr(temp_file_path, api_key, model="Llama-3.2-11B-Vision")
                 st.markdown(markdown_content)
             except Exception as e:
                 st.error(f"An error occurred: {e}")
 
         # Clean up the temporary file
         os.remove(temp_file_path)
-    else:
-        st.warning("Please upload an image file to proceed.")
 
 if __name__ == "__main__":
     main()
