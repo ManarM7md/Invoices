@@ -5,11 +5,19 @@ from together import Together
 import streamlit as st
 import cv2
 import numpy as np
-from pytesseract import pytesseract
+from pytesseract import pytesseract, TesseractNotFoundError
 from PIL import Image
 
 # Configure Tesseract path
 pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
+
+def check_tesseract_installed() -> bool:
+    """Check if Tesseract is installed and accessible."""
+    try:
+        _ = pytesseract.get_tesseract_version()
+        return True
+    except TesseractNotFoundError:
+        return False
 
 def encode_image(image_path: str) -> str:
     """Read and encode image to base64."""
@@ -50,6 +58,9 @@ def get_markdown(
 
 def tesseract_ocr(file_path: str) -> str:
     """Perform OCR using Tesseract."""
+    if not check_tesseract_installed():
+        raise RuntimeError("Tesseract is not installed or not found in the PATH.")
+
     image = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
     if image is None:
         raise ValueError("Invalid image file.")
@@ -115,7 +126,7 @@ def main():
 
         with col2:
             try:
-                markdown_content = ocr(temp_file_path, api_key if model_choice != "Tesseract" else None, model=model_choice)
+                markdown_content = ocr(temp_file_path, api_key=api_key , model=model_choice) 
                 st.markdown("### Extracted Markdown:")
                 st.markdown(markdown_content)
             except Exception as e:
