@@ -94,11 +94,6 @@ def main():
     st.title("Image to Markdown Converter")
     st.write("Upload an image, and this app will convert its content into Markdown.")
 
-    api_key = st.text_input("Enter your Together AI API Key", type="password")
-
-    if not api_key:
-        st.warning("Please enter your API key to use Together AI models.")
-
     uploaded_file = st.file_uploader("Choose an image file", type=["jpg", "jpeg", "png"])
 
     model_choice = st.selectbox("Choose OCR Model", ["Llama-3.2-11B-Vision", "Tesseract"])
@@ -108,6 +103,11 @@ def main():
         with open(temp_file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
 
+    api_key = st.text_input("Enter your Together AI API Key", type="password")
+
+    if not api_key:
+        st.warning("Please enter your API key to use Together AI models.")
+    
         col1, col2 = st.columns(2)
 
         with col1:
