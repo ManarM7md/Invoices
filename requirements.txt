@@ -1,7 +1,6 @@
 together>=1.0.0  
 streamlit>=1.24.0
 pillow 
-langdetect 
 easyocr 
 pytesseract
 tesseract-ocr
